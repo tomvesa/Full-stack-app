@@ -1,12 +1,20 @@
 const {Course, User} = require('../models/');
 
+
+
+
 // methods for controling the interaction between the database and course model
 module.exports = {
     // creata a new course instance in the database
     registerCourse: async (req,res) => {
+        
+        const cookies = req.cookies;
+        const {authenticatedUser} = cookies;
+        const user =  JSON.parse(authenticatedUser);
+        
       try { 
         let {title, description, estimatedTime, materialsNeeded, userId} = req.body;
-        
+        //console.log(req);
         if (!userId){
             return res.status(401).json({message:"Unauthorised"})
         }
@@ -16,9 +24,10 @@ module.exports = {
             description,
             estimatedTime,
             materialsNeeded,
-            userId,
+            userId: user.id,
         });
-               res.set('Location', `/courses/${course.id}`) 
+               res.set('Location', `/courses/${course.id}`);
+               console.log('course created', course); 
         return res.status(201).json()
     } catch (err){
         if(err.name == 'SequelizeValidationError' || err.name == 'SequelizeUniqueConstraintError'){

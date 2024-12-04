@@ -24,7 +24,16 @@ app.use(express.json());
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-app.use(cors());
+
+// CORS configuration
+const corsOptions = {
+  origin: 'http://localhost:5173', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, 
+  
+};
+
+app.use(cors(corsOptions));
 
 // parse cookies
 app.use(cookieParser());

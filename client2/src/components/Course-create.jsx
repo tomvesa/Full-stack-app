@@ -1,4 +1,4 @@
-import { useContext, useRef, useState, userContext } from "react";
+import { useContext, useRef, useState } from "react";
 import api from "../utils/dataFetch";
 import Cookies from 'js-cookie';
 
@@ -7,9 +7,8 @@ import UserContext from "../context/UserContext";
 
 const CourseCreate = () => {
     const cookie = Cookies.get("authenticatedUser");
+    console.log("cookie", cookie);
     const {authUser} = useContext(UserContext);
-
-    const credentials = {emailAddress: authUser.email, password: authUser.password}
 
     //ref fields
     const courseTitle = useRef('');
@@ -20,7 +19,9 @@ const CourseCreate = () => {
     const [errors, setErrors] = useState([]);
 
     const handleSubmit = async (e) => {
+        
         e.preventDefault();
+        
         const courseData = {
             title: courseTitle.current.value,
             description: courseDescription.current.value,
@@ -30,9 +31,12 @@ const CourseCreate = () => {
         }
         console.log("sending course data", courseData);
         try{
-            const response = await api('courses/', "POST", courseData, credentials);
-         
-        console.log(response);
+            //const response = await api('courses/', "POST", courseData, credentials);
+            const response = await api("courses/", "POST", courseData, null);
+            console.log(courseData);
+            console.log("response", response);
+
+
         } catch (error) {
             console.error('Error creating course:', error);
             setErrors(["Failed to create course"])

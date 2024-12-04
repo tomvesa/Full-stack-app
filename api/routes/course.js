@@ -13,7 +13,7 @@ const { registerCourse,
 
 
 // all courses routes
-courseRouter.post('/', authenticateUser, registerCourse);
+courseRouter.post('/',  registerCourse);
 courseRouter.get('/', getAllCourses);
 
 // individual course routes
