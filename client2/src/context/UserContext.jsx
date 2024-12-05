@@ -34,6 +34,7 @@ export const UserProvider = ({children}) => {
     const signOut = ()=>{
 
       setAuthUser(null);
+      Cookies.remove('authenticatedUser');
     }
  
 
