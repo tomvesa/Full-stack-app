@@ -1,6 +1,6 @@
 const express = require('express');
 const courseRouter = express.Router();
-const { authenticateUser } = require('../middleware/auth-user');
+const { authenticateUser } = require('../../middleware/auth-user');
 
 // import controllers to handle route requests
 const { registerCourse, 
@@ -8,12 +8,11 @@ const { registerCourse,
         getCourseById,
         updateCourse,
         deleteCourse,
-                        } = require('../controllers/course');
-                        console.log("get courses from routes", getAllCourses)
+                        } = require('../../controllers/course');
 
 
 // all courses routes
-courseRouter.post('/',  registerCourse);
+courseRouter.post('/', authenticateUser, registerCourse);
 courseRouter.get('/', getAllCourses);
 
 // individual course routes

@@ -5,7 +5,7 @@ const api = (
     body = null, 
     credentials = null
     ) => {
-    const url = `http://localhost:5000/${path}`;
+    const url = `http://localhost:5000/api/${path}`;
     console.log(url)
 
     const options = {

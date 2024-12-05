@@ -3,9 +3,9 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
-const cors = require('cors');
-const cookieParser = require('cookie-parser')
 const Sequelize = require('sequelize');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const {development} = require('./config/config.json');
 const asyncHandler = require('./middleware/asyncHandler');
 
@@ -14,29 +14,25 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 
 
 // router import
-const routes = require('../api/routes');
+const routes = require('./routes/api');
 
 // create the Express app
 const app = express();
 //add a body property to the express request
 app.use(express.json());
 
-// setup morgan which gives us http request logging
-app.use(morgan('dev'));
-
-
-// CORS configuration
-const corsOptions = {
-  origin: 'http://localhost:5173', 
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, 
-  
-};
-
-app.use(cors(corsOptions));
-
-// parse cookies
+// setup cookie-parser middleware
 app.use(cookieParser());
+
+// setup morgan which gives us http request logging
+app.use(morgan('tiny'));
+
+// middleware to handle CORS
+const corsOptions = {
+	origin: 'http://localhost:5173',
+	credentials: true,
+}
+app.use(cors(corsOptions))
 
 //connection to database
 const sequelize = new Sequelize(development);
@@ -48,7 +44,7 @@ const sequelize = new Sequelize(development);
   
 
 // use api routes
-app.use('/', routes);
+app.use('/api/', routes);
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
@@ -57,9 +53,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('routes/courses', (req, res) => {
-  res.json();
-});
+
 
 // send 404 if no other route matched
 app.use((req, res) => {

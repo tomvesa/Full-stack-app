@@ -5,14 +5,16 @@ const { User } = require('../models/');
 console.log("User from credentials", User);
 
 
-
 exports.authenticateUser = async (req, res, next) => {
+    console.log("authenticateUser middleware");
     const cookieUser = req.cookies.authenticatedUser;
+    console.log("authenticated user from a cookie", cookieUser);
     if(cookieUser){
         console.log("authenticated user from a cookie", cookieUser);
         const authenticatedUser = JSON.parse(cookieUser);
          req.currentUser = authenticatedUser.user;
          console.log("current user from cookie", req.currentUser);
+         next()
     } else {
         //console.log("request", req);
         //look for credentials using the basic auth module
