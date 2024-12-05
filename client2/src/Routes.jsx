@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Main from './components/Main.jsx';
 import CourseDetail from './components/Course-detail';
 import NotFound from './components/NotFound';
@@ -12,6 +12,7 @@ const AppRoutes = () =>{
 
             <Routes>
                 <Route exact path="/" element={<Main />} />
+                <Route path="/courses" element={<Navigate to="/" />} />
                 <Route path="/courses/:id" element={<CourseDetail />} />
                 <Route path="/courses/create" element={<CourseCreate />} />
                 <Route path="/users/signup" element={<UserSignUp />} />
