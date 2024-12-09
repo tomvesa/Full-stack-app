@@ -9,6 +9,7 @@ const CourseDetail = () => {
     // Get path name without "/" to be used in the API call
     const path = location.pathname.substring(1);
 
+    
     const callAPI = async () => {
         try {
             const response = await api(`${path}`);
@@ -41,8 +42,25 @@ const CourseDetail = () => {
 
     if (!courseData) return <div>Loading...</div>;  // Loading state
 
+    const handleReturn = (e) => {
+        e.preventDefault();
+        navigate('/');
+    }
+
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        navigate(`/${path}/update`);
+    }
+
     return (
-        <>
+        <main>
+            <div className="actions--bar">
+                <div className="wrap">
+                    <a className="button" onClick={handleUpdate}>Update Course</a>
+                    <a className="button" href="#">Delete Course</a>
+                    <a className="button button-secondary" onClick={handleReturn}>Return to List</a>
+                </div>
+            </div>
             <div className="wrap">
                 <h2>Course Detail</h2>
                 <form>
@@ -70,7 +88,7 @@ const CourseDetail = () => {
                     </div>
                 </form>
             </div>
-        </>
+        </main>
     );
 };
 
