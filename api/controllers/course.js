@@ -85,7 +85,8 @@ updateCourse: async (req, res) =>{
         }else if((!updatedCourseInfo.title || !updatedCourseInfo.title === "")||
         (!updatedCourseInfo.description || !updatedCourseInfo.description === "")  ) {
             //if title or description is not present
-           return res.status(400).json({ error: "Title and description is required"})
+            res.status(400).json({ error: "Title and description is required"})
+           return console.log(res.body)
         } else {  
         //update if all is ok 
         const user = req.currentUser;

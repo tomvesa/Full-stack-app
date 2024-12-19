@@ -1,14 +1,21 @@
-import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useRef, useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/dataFetch";
+import ValidationErrors from "./ValidationError";
+
+import UserContext from "../context/UserContext";
 
 const UserSignUp = () => {
-
+    const {actions} = useContext(UserContext);
+    const navigate = useNavigate();
+    // ref fields
     const firstName = useRef(null);
     const lastName = useRef(null);
     const emailAddress = useRef(null);
     const password = useRef(null);
     const [errors, setErrors] = useState([]);
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,8 +27,27 @@ const UserSignUp = () => {
             password: password.current.value
         }
 
-        const response = await api("users", "POST", user, null);
-        console.log(response);
+        try {
+          const response = await api("users", "POST", user, null);
+          if (response.status === 201) {
+            const signedUser = await actions.signIn(user);
+            if (signedUser) {
+              navigate("/");
+            }
+          } else if (response.status === 400) {
+            const data = await response.json();
+            setErrors(data.errors);
+            console.log(errors);
+          } else {
+            throw new Error(
+              "Network response was not ok " + response.statusText
+            );
+          }
+        } catch (e) {
+          console.error("Error creating user:", e);
+        }
+
+            
 
     }
 
@@ -29,7 +55,9 @@ const UserSignUp = () => {
         <main>
             <div className="form--centered">
             <h2>Sign Up</h2>
-            
+            <>
+                {errors.length > 0 ? <ValidationErrors errors={errors} /> : null}
+            </>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="firstName">First Name</label>
                 <input id="firstName" name="firstName" type="text" ref={firstName}/>

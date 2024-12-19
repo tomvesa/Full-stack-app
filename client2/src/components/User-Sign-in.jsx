@@ -1,6 +1,6 @@
 import {useNavigate, Link} from 'react-router-dom';
 import { useRef, useContext, useState } from 'react';
-
+import ValidationErrors from './ValidationError';
 import UserContext from "../context/UserContext";
 
 const UserSignIn = () => {
@@ -21,14 +21,15 @@ const UserSignIn = () => {
         }  
 
         try {
-            const user = await actions.signIn(credentials);
+            const user = await actions.signIn(credentials);            
             if (user) {
                 navigate("/");
             } else {
                 setErrors(["Sign in failed"])
             } 
         } catch (errors) {
-            console.log(`user not found: ${errors.message}`)
+            setErrors([`Something went wrong`]);
+            console.error(`Server Error: ${errors.message}`);
         }
     }
 
@@ -39,7 +40,7 @@ const UserSignIn = () => {
         <main >
             <div className="form--centered" >
                 <h2>Sign In</h2>
-                
+                <>{errors.length > 0 ? <ValidationErrors errors={errors} /> : null}</>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="emailAddress">Email Address</label>
                     <input id="emailAddress" name="emailAddress" type="email" ref={emailAddress} />

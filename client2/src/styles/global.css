@@ -145,12 +145,25 @@ header nav a:hover {
     font-weight: 300;
     margin-left: 1rem;
     line-height: 1.25;
+    list-style: none;
 }
 .validation--errors li {
     margin-bottom: .5rem;
 }
 .validation--errors li:last-child {
     margin-bottom: 0;
+}
+
+.notification {
+    display: flex;
+    justify-content: center;
+}
+.notification .success{
+    background: #9fe09f8b;
+    color: #5b5959;
+    border: 1px solid #123d1765;
+    border-radius: .5rem;
+    padding: .5rem;
 }
 
 .form--centered {
