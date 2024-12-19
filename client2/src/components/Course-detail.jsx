@@ -1,9 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/dataFetch';
+import Cookies from 'js-cookie';
+
+import UserContext from '../context/UserContext';
 
 const CourseDetail = () => {
     const navigate = useNavigate();
+
+    // cookie authentication for user
+    const cookie = Cookies.get("authenticatedUser");
+    console.log("cookie", cookie);
+    const {user} = useContext(UserContext).authUser;
+    console.log("authUser", user.id);
+
     const [courseData, setCourseData] = useState(null);
     const [courseMaterials, setCourseMaterials] = useState([]);
     // Get path name without "/" to be used in the API call
@@ -18,6 +28,7 @@ const CourseDetail = () => {
             }
             const data = await response.json();
              setCourseData(data.course);  // Updated to set a single course
+             console.log(courseData)
 
         } catch (error) {
            navigate("/404"); 
@@ -54,6 +65,8 @@ const CourseDetail = () => {
 
     return (
         <main>
+        {/* display action bar only when the course is created by logged in user */}
+         {  user.id === courseData.userId ? 
             <div className="actions--bar">
                 <div className="wrap">
                     <a className="button" onClick={handleUpdate}>Update Course</a>
@@ -61,6 +74,7 @@ const CourseDetail = () => {
                     <a className="button button-secondary" onClick={handleReturn}>Return to List</a>
                 </div>
             </div>
+            : null }
             <div className="wrap">
                 <h2>Course Detail</h2>
                 <form>
