@@ -1,11 +1,14 @@
 import { useContext, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../utils/dataFetch";
 import Cookies from 'js-cookie';
 
+import ValidationErrors from "./ValidationError";
 import UserContext from "../context/UserContext"; 
 
 
 const CourseCreate = () => {
+    const navigate = useNavigate();
     const cookie = Cookies.get("authenticatedUser");
     console.log("cookie", cookie);
     const {authUser} = useContext(UserContext);
@@ -15,8 +18,9 @@ const CourseCreate = () => {
     const courseDescription = useRef('');
     const estimatedTime = useRef('');
     const materialsNeeded = useRef('');
-    //errors State 
+    // State 
     const [errors, setErrors] = useState([]);
+    const [success, setSuccess] = useState(null);
 
     const handleSubmit = async (e) => {
         
@@ -33,8 +37,20 @@ const CourseCreate = () => {
         try{
             //const response = await api('courses/', "POST", courseData, credentials);
             const response = await api("courses/", "POST", courseData, null);
+            console.log(response);
+            if(response.status === 201){
+                setSuccess("Course created successfully");
+                setErrors([]);
+                setTimeout(() =>{
+                    navigate("/");
+                }, 2000);
+            }else if(response.status === 400){
+                const data = await response.json();
+                setErrors(data.errors);
+                console.log(errors);
+            }
             console.log(courseData);
-            console.log("response", response);
+
 
 
         } catch (error) {
@@ -47,13 +63,10 @@ const CourseCreate = () => {
         <main>
             <div className="wrap">
                 <h2>Create Course</h2>
-                <div className="validation--errors">
-                    <h3>Validation Errors</h3>
-                    <ul>
-                        <li>Please provide a value for "Title"</li>
-                        <li>Please provide a value for "Description"</li>
-                    </ul>
-                </div>
+                <>{errors.length > 0 ? <ValidationErrors errors={errors} /> : null}</>
+                <div className="notification">
+          {success && <span className="success">{success}</span>}
+        </div>
                 <form onSubmit={handleSubmit}>
                     <div className="main--flex">
                         <div>
