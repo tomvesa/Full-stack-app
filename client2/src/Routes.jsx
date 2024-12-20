@@ -5,7 +5,7 @@ import NotFound from './components/NotFound';
 import CourseCreate from './components/Course-create';
 import CourseUpdate from './components/Course-update';
 import UserSignUp from './components/User-Sign-Up';
-import UserSignIn from './components/User-Sign-In';
+import UserSignIn from './components/User-Sign-in';
 
 
 const AppRoutes = () =>{
