@@ -21,15 +21,16 @@ const UserSignIn = () => {
         }  
 
         try {
-            const user = await actions.signIn(credentials);            
+            const user = await actions.signIn(credentials);   
+           
             if (user) {
                 navigate("/");
             } else {
                 setErrors(["Sign in failed"])
             } 
-        } catch (errors) {
-            setErrors([`Something went wrong`]);
-            console.error(`Server Error: ${errors.message}`);
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            navigate('/error' );
         }
     }
 
