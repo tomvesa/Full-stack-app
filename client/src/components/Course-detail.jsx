@@ -1,5 +1,6 @@
 import  { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown'
 import api from '../utils/dataFetch';
 import Cookies from 'js-cookie';
 import ValidationErrors from './ValidationError';
@@ -131,7 +132,7 @@ const CourseDetail = () => {
                   By {courseData.Instructor?.firstName}{" "}
                   {courseData.Instructor?.lastName}
                 </p>
-                <p className="course--description">{courseData.description}</p>
+                <ReactMarkdown>{courseData.description}</ReactMarkdown>
               </div>
               <div>
                 <h3 className="course--detail--title">Estimated Time</h3>
@@ -139,9 +140,7 @@ const CourseDetail = () => {
 
                 <h3 className="course--detail--title">Materials Needed</h3>
                 <ul className="course--detail--list">
-                  {courseMaterials.map((material, index) =>
-                    material ? <li key={index}>{material}</li> : ""
-                  )}
+                <ReactMarkdown>{courseData.materialsNeeded}</ReactMarkdown>
                 </ul>
               </div>
             </div>

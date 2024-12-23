@@ -22,6 +22,10 @@ const CourseCreate = () => {
     const [errors, setErrors] = useState([]);
     const [success, setSuccess] = useState(null);
 
+    const handleCancel = ()=>{
+        navigate("/");
+    }
+
     const handleSubmit = async (e) => {
         
         e.preventDefault();
@@ -85,7 +89,7 @@ const CourseCreate = () => {
                         </div>
                     </div>
                     <button className="button" type="submit">Create Course</button>
-                    <button className="button button-secondary" >Cancel</button>
+                    <button className="button button-secondary" onClick={handleCancel} >Cancel</button>
                 </form>
             </div>
         </main>        
