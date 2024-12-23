@@ -1,9 +1,11 @@
 import {useNavigate} from 'react-router-dom'
 
 const AddNewCourse = () =>{
+    // the new cours button to redirect to new course page
     const navigate = useNavigate();
     
     const handleClick = (e) => {
+        // redirect to the new course create page
         e.preventDefault();
         navigate(`/courses/create`);
     }

@@ -1,5 +1,5 @@
 const NotFound = () => {
-
+// 404 page 
     return (
     <div className="wrap">
         <h2>Not Found</h2>

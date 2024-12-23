@@ -19,7 +19,7 @@ const UserSignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+      // collect user information
         const user = {
             firstName: firstName.current.value,
             lastName: lastName.current.value,
@@ -28,23 +28,28 @@ const UserSignUp = () => {
         }
 
         try {
+          // send user infomation to create a new account
           const response = await api("users", "POST", user, null);
           if (response.status === 201) {
+            // if user is created logg them in right away and redirect to main page
             const signedUser = await actions.signIn(user);
             if (signedUser) {
               navigate("/");
             }
           } else if (response.status === 400) {
+            // on bad request set error messages
             const data = await response.json();
             setErrors(data.errors);
             console.log(errors);
           } else {
+            // on other errors throw error redirect to error page
             throw new Error(
               "Network response was not ok " + response.statusText
             );
           }
         } catch (e) {
           console.error("Error creating user:", e);
+          navigate("/error");
         }
 
             

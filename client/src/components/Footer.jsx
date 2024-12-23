@@ -1,9 +1,9 @@
 
 const Footer = () => {
-
+  // footer component
     return (
         <footer className="footer-container">
-            <p>�� 2024 Your Company. All rights reserved.</p>
+            <p><img src="/Tomas-icon-SVG.svg" height="25" alt='company logo'></img> Tomvesa dev.io</p>
         </footer>
     )
 }

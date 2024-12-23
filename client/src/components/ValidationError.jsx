@@ -1,6 +1,6 @@
 
 const ValidationErrors = ({errors}) => {
-    console.log("errors in validation", errors)
+   // on errors create a list of errors to display in error component
     if (errors.length) {
     return (
       <div className="validation--errors">

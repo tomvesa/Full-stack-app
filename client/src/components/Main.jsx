@@ -1,24 +1,30 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/dataFetch.jsx';
 import CourseButton from './courseButton.jsx';
 import AddNewCourse from './CourseAddNewButton';
-import UserContext from '../context/UserContext.jsx';
+
 
 const Main = () =>{
+  // main page/home page with all courses buttons
     const navigate = useNavigate();
+  // state for all courses data  
     const [courses, setCourses] = useState([]);
-    const {authUser} = useContext(UserContext);
+   
 
     const callAPI = async () => {
+      // get all courses data
         try {
           const response = await api("courses");
           
           if (!response.ok) {
+            // on response error redirect to error page
             throw new Error('Network response was not ok ' + response.statusText);
-          }
+          } else {
+          // set courses data  
           const data = await response.json();
           setCourses(data.courses);
+          }
         } catch (error) {
           console.error('Error fetching courses:', error);
           navigate("/error");
@@ -34,6 +40,7 @@ const Main = () =>{
         <main>
             <h2>Course List</h2>
             <div className="wrap main--grid">
+            {/** iterate through course data to display buttons */}
             {courses.map((item, index) =>(
                 <CourseButton 
                     key={index}
@@ -41,13 +48,8 @@ const Main = () =>{
                     id={item.id}
                 />
             ))}
-            {authUser ?
-            <>
+            {/* display new course button at the end of the courses list*/ }
              <AddNewCourse />
-            </>
-            : null
-            }
-
             </div>
 
         </main>

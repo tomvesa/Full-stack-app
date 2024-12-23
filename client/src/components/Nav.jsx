@@ -7,10 +7,12 @@ import '../styles/nav.css';
 
 
 const Nav = () => {
+  // get user data and action from user context
   const { authUser, actions } = useContext(UserContext);
   const navigate = useNavigate()
 
   const handleLogout = (e) => {
+    //on logout sign out and redirect to main page
     e.preventDefault();
     actions.signOut();
     navigate('/');
@@ -18,6 +20,7 @@ const Nav = () => {
 
     return (
       <nav>
+      {/**based on the user data display login/signup or logout components */}
           {authUser === null? 
           <ul className="header--signedout">
             <li><Link className="signup" to="users/signup">Sign up</Link></li>

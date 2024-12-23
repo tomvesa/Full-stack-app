@@ -4,24 +4,30 @@ import ValidationErrors from './ValidationError';
 import UserContext from "../context/UserContext";
 
 const UserSignIn = () => {
+    // get actions sign in and sign out from user context
     const {actions} = useContext(UserContext);
     const navigate = useNavigate();
+    // keep track of the location
     const location = useLocation();
-    console.log(location)
 
+    //state for errors
     const [errors, setErrors] = useState([]);
-    // form fields state
+
+    // form fields reference
     const emailAddress = useRef('');
     const password = useRef('');
 
     const handleCancel = ()=>{
+        // redirect to main page
         navigate("/");
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // check where the user tried to go to redirect them to desired page or main page
         let from = "/";
         if(location.state){
+            // if location stat is set, after login redirect them to this page 
             from = location.state.from;
         }
         const  credentials = {
@@ -33,11 +39,14 @@ const UserSignIn = () => {
             const user = await actions.signIn(credentials);   
            
             if (user) {
+                // after successful login redirect to desired page or main page
                 navigate(from);
             } else {
+                // set error messege 
                 setErrors(["Sign in failed"])
             } 
         } catch (err) {
+            // redirect to error page when api call fails
             console.error('Error fetching data:', err);
             navigate('/error' );
         }
@@ -50,6 +59,7 @@ const UserSignIn = () => {
         <main >
             <div className="form--centered" >
                 <h2>Sign In</h2>
+                {/* display error messages */}
                 <>{errors.length > 0 ? <ValidationErrors errors={errors} /> : null}</>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="emailAddress">Email Address</label>

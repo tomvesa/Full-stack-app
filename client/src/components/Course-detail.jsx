@@ -2,22 +2,17 @@ import  { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown'
 import api from '../utils/dataFetch';
-import Cookies from 'js-cookie';
 import ValidationErrors from './ValidationError';
 import UserContext from '../context/UserContext';
 
 const CourseDetail = () => {
     const navigate = useNavigate();
 
-    // cookie authentication for user
-    const cookie = Cookies.get("authenticatedUser");
-    console.log("cookie", cookie);
-    
+   //check if the user has already logged in from the context
     const { authUser } = useContext(UserContext);
-    console.log("authUser", authUser?.user.id);
     
+    // states for the course data, success message and error messages
     const [courseData, setCourseData] = useState(null);
-    const [courseMaterials, setCourseMaterials] = useState([]);
     const [success, setSuccess] = useState(null);
     const [errors, setErrors] = useState([]);
     // Get path name without "/" to be used in the API call
@@ -28,35 +23,36 @@ const CourseDetail = () => {
         try {
             const response = await api(`${path}`);
             if (!response.ok) {
+               // on response error throw error and redirect to 404
                 throw new Error('Network response was not ok ' + response.statusText);
+            } else { const data = await response.json();
+             setCourseData(data.course);  // Updated to set a single course             
             }
-            const data = await response.json();
-             setCourseData(data.course);  // Updated to set a single course
-             console.log(courseData)
-
         } catch (error) {
            navigate("/404"); 
-           return console.error('Error fetching course:', error);
-           
+           return console.error('Error fetching course:', error);           
         }
     };
 
     // call API to delete course
     const callDeleteAPI = async() =>{
         try {
+          // call course API with Delete Method
             const response = await api(`${path}`, "DELETE");
             if (response.status === 204) {
+              // on success set success message and redirect to main page after 2s delay
                 setSuccess("Course deleted successfully");
                 setTimeout(() =>{
                     navigate("/");
                 }, 2000);
             } else if (response.status === 403){
+              // on authorisation error set error, display message and redirect to main page after 2s delay
                 setErrors(["Not authorized to delete this course"]);
                 setTimeout(() =>{
-
                     navigate("/");
                 }, 2000);
             } else {
+              // if different errors redirect to 404 page
                 setErrors(["Course not found"]);
                 setTimeout(() =>{
                     navigate("/404");
@@ -72,29 +68,23 @@ const CourseDetail = () => {
         callAPI();
     }, []);
 
-    useEffect(() => {
-        if (courseData) {
-            console.log(courseData); 
-            if (courseData.materialsNeeded) {
-            const materials = courseData.materialsNeeded.split('\n').map(material => material.replace("*","").trim())
-            setCourseMaterials( materials ) 
-            }
-        }
-    }, [courseData]);
-
-    if (!courseData) return <div>Loading...</div>;  // Loading state
+    // on page load start with "Loading..." message before first data is loaded
+    if (!courseData) return <div>Loading...</div>;  
 
     const handleReturn = (e) => {
+      // get back to main page
         e.preventDefault();
         navigate('/');
     }
 
     const handleUpdate = (e) => {
+      // redirect to course update page
         e.preventDefault();
         navigate(`/${path}/update`);
     }
 
     const handleDelete = (e) => {
+      // call delete API
         e.preventDefault();
         callDeleteAPI()
     }
@@ -119,8 +109,10 @@ const CourseDetail = () => {
         ) : null}
         <div className="wrap">
           <h2>Course Detail</h2>
+          {/* display validation errors if any exists*/}
           <>{errors.length > 0 ? <ValidationErrors errors={errors} /> : null}</>
           <div className="notification">
+            {/* display success message if any exists */}
             {success && <span className="success">{success}</span>}
           </div>
           <form>

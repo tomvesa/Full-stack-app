@@ -1,5 +1,5 @@
 const Forbidden = () => {
-
+ // forbidden element on unauthorised user action
     return(
         <main>
         <div className="wrap">
