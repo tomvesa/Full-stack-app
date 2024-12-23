@@ -11,10 +11,11 @@ export const UserProvider = ({children}) => {
     const [authUser, setAuthUser] = useState(cookie ? JSON.parse(cookie) : null);
     
     const signIn = async (credentials) => {
+      // try to find a user in database
         const response = await api('users', "GET", null, credentials);
             if ( response.status === 200 ) {
                 const user = await response.json();
-                console.log(user);
+                // if user exist set user and update cookies
                 setAuthUser(user);
                 Cookies.set('authenticatedUser', JSON.stringify(user), {
                   expires:1,
@@ -25,6 +26,7 @@ export const UserProvider = ({children}) => {
                 }); 
                 return user;
             }else if (response.status === 401){
+              // if user does not exist return null
                 return null;
             } else {
                 throw new Error(response.statusText);
@@ -32,7 +34,7 @@ export const UserProvider = ({children}) => {
     }
 
     const signOut = ()=>{
-
+      // clear user and cookies on sign out
       setAuthUser(null);
       Cookies.remove('authenticatedUser');
     }

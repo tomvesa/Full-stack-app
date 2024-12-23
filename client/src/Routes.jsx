@@ -1,17 +1,21 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Main from './components/Main.jsx';
-import CourseDetail from './components/Course-detail';
-import NotFound from './components/NotFound';
-import CourseCreate from './components/Course-create';
-import CourseUpdate from './components/Course-update';
+
 import UserSignUp from './components/User-Sign-Up';
 import UserSignIn from './components/User-Sign-in';
+
 import PrivateRoute from './components/PrivateRoute';
+import CourseDetail from './components/Course-detail';
+import CourseCreate from './components/Course-create';
+import CourseUpdate from './components/Course-update';
+
 import Forbidden from './components/Forbidden';
 import Error from './components/Error';
+import NotFound from './components/NotFound';
 
 
 const AppRoutes = () =>{
+  // list of all app routes
     return (
       <Routes>
         <Route exact path="/" element={<Main />} />
