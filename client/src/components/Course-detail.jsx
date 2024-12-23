@@ -2,7 +2,7 @@ import  { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/dataFetch';
 import Cookies from 'js-cookie';
-
+import ValidationErrors from './ValidationError';
 import UserContext from '../context/UserContext';
 
 const CourseDetail = () => {
@@ -44,15 +44,15 @@ const CourseDetail = () => {
     const callDeleteAPI = async() =>{
         try {
             const response = await api(`${path}`, "DELETE");
-            console.log(response);
             if (response.status === 204) {
                 setSuccess("Course deleted successfully");
                 setTimeout(() =>{
                     navigate("/");
                 }, 2000);
-            } else if (response.status === 401){
+            } else if (response.status === 403){
                 setErrors(["Not authorized to delete this course"]);
                 setTimeout(() =>{
+
                     navigate("/");
                 }, 2000);
             } else {
@@ -118,6 +118,7 @@ const CourseDetail = () => {
         ) : null}
         <div className="wrap">
           <h2>Course Detail</h2>
+          <>{errors.length > 0 ? <ValidationErrors errors={errors} /> : null}</>
           <div className="notification">
             {success && <span className="success">{success}</span>}
           </div>
